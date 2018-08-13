@@ -26,3 +26,22 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.posts_grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.post-thumbnail {
+  border: 1px solid #222;
+  flex: 1;
+}
+
+.post-thumbnail:hover {
+  background: #009befa2
+}
+
+.post-thumbnail img,
+.post-thumbnail a {
+  display: block;
+}
