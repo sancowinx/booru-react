@@ -1,0 +1,19 @@
+{
+  "name": "promise-me",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.4",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "start-https": "HTTPS=true react-scripts start"
+  }
+}
