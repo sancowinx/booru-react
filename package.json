@@ -18,9 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-https": "RATING=e HTTPS=true react-scripts start"
+    "start-https": "cross-env RATING=e HTTPS=true react-scripts start"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
