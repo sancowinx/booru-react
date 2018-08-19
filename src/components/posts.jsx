@@ -44,6 +44,21 @@ export default class DanbooruPosts extends Component {
     })
   }
 
+  getFirstPage = () => {
+    this.setState({ isLoading: true })
+
+    Danbooru.Posts.getPaginated(1)
+    .then((res) => {
+      this.setState((prevState, props) => {
+        return {
+          isLoading: false,
+          images: res.map((image) => image),
+          currentPage: 1
+        }
+      })
+    })
+  }
+
   getPrevPaginated = () => {
     this.setState({ isLoading: true })
 
@@ -75,12 +90,18 @@ export default class DanbooruPosts extends Component {
   }
 
   renderPaginationControl = () => {
-    if (this.state.isLoading) {
+
+    const { isLoading, currentPage } = this.state
+
+    if (isLoading) {
       return <div className={'danbooru--pagination_control'}>Loading...</div>
     } else {
+      const shouldDisabled = currentPage === 1 ? true : false
       return (
         <div className={'danbooru--pagination_control'}>
-          {this.state.currentPage > 1 && <button type={'button'} onClick={this.getPrevPaginated}>Prev</button>}
+        <button type={'button'} onClick={this.getFirstPage}>First</button>
+          <button type={'button'} onClick={this.getPrevPaginated} disabled={shouldDisabled}>Prev</button>
+          <span><strong>{currentPage}</strong></span>
           <button type={'button'} onClick={this.getPaginated}>Next</button>
         </div>
       )
