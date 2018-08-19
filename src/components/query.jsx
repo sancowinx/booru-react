@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Danbooru from '../api'
 
 // needed JedWatson/react-select
 export default class QueryInput extends Component {
@@ -6,6 +7,7 @@ export default class QueryInput extends Component {
     super(props)
 
     this.state = {
+      maximumTagExceed: false,
       form: {
         queryString: ''
       }
@@ -15,22 +17,31 @@ export default class QueryInput extends Component {
   onSubmit = (event) => {
     event.preventDefault()
 
-    console.log('submitting search', this.state)
+    if (this.props.getByTag && !this.state.maximumTagExceed) this.props.getByTag(this.state.form.queryString)
   }
 
   onChange = (event) => {
     const { value } = event.target
-    console.log('inputChange', value)
-
-    this.setState((prevState) => {
-      return {
+    if (value.split(' ').length > 2) {
+      this.setState({
+        maximumTagExceed: true,
         form: {
-          queryString: value
+            queryString: value
+          }
+        })
+    } else {
+      this.setState((prevState) => {
+        return {
+          maximumTagExceed: false,
+          form: {
+            queryString: value
+          }
         }
-      }
-    })
+      })
+    }
   }
 
+  // needs lodash
   onChangeDebounced = (event) => {
     const { value } = event.target
     console.log('inputChange', value)
@@ -38,9 +49,10 @@ export default class QueryInput extends Component {
 
   render() {
     return (
-      <form ref={(el) => { this.form = el}} className={'form--search_tag'} name={'form--search_tag'} onSubmit={this.onSubmit}>
-        <input onChange={this.onChange} type={'text'} className={'search_tag--input'} name={'search_tag--input'} id={'search_tag--input'} />
-        <button type={'submit'}>Go</button>
+      <form acceptCharset={'UTF-8'} ref={(el) => { this.form = el}} className={'form--search_tag'} name={'form--search_tag'} onSubmit={this.onSubmit}>
+        <input autoComplete={'false'} onBlur={this.onChange} onChange={this.onChange} type={'text'} className={'search_tag--input'} name={'search_tag--input'} id={'search_tag--input'} />
+        <button type={'submit'} disabled={this.state.maximumTagExceed}>Go</button>
+        {this.state.maximumTagExceed && <span style={{display: 'block', color: '#ff102d'}}>Exceed maximum tag, two maximum!</span>}
       </form>
     )
   }

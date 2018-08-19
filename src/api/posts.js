@@ -14,9 +14,9 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`,
+        rating: `${rating}`,
       },
-      json: true, // Automatically parses the JSON string in the response
+      json: true
     }
 
     return request(options)
@@ -29,10 +29,10 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`,
+        rating: `${rating}`,
         page,
       },
-      json: true,
+      json: true
     }
 
     return request(options)
@@ -43,15 +43,13 @@ export default {
   },
   // test flowtype
   getByTag: (tags: string) => {
-    const searches = tags.replace(' ', '+')
-    console.log('searches', searches)
-
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}&tags=${searches}`,
+        rating: `${rating}`,
+        tags
       },
-      json: true,
+      json: true
     }
 
     return request(options)
