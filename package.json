@@ -14,11 +14,11 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
+    "start": "cross-env REACT_APP_RATING=e react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-https": "cross-env RATING=e HTTPS=true react-scripts start"
+    "start-https": "cross-env REACT_APP_RATING=e HTTPS=true react-scripts start"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
