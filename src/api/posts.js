@@ -16,7 +16,7 @@ export default {
       qs: {
         rating: `${rating}`,
       },
-      json: true, // Automatically parses the JSON string in the response
+      json: true
     }
 
     return request(options)
@@ -32,7 +32,7 @@ export default {
         rating: `${rating}`,
         page,
       },
-      json: true,
+      json: true
     }
 
     return request(options)
@@ -49,7 +49,7 @@ export default {
         rating: `${rating}`,
         tags
       },
-      json: true,
+      json: true
     }
 
     return request(options)
