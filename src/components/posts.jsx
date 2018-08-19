@@ -103,7 +103,7 @@ export default class DanbooruPosts extends Component {
       const shouldDisabled = currentPage === 1 ? true : false
       return (
         <div className={'danbooru--pagination_control'}>
-        <button type={'button'} onClick={this.getFirstPage}>First</button>
+          {!currentPage === 1 && <button type={'button'} onClick={this.getFirstPage}>First</button>}
           <button type={'button'} onClick={this.getPrevPaginated} disabled={shouldDisabled}>Prev</button>
           <span><strong>{currentPage}</strong></span>
           <button type={'button'} onClick={this.getPaginated}>Next</button>
