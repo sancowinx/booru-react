@@ -1,3 +1,4 @@
+// @flow
 import request from 'request-promise'
 
 // request-promise parse results as stringified json, if use .get(), .post()
@@ -13,7 +14,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`, // no hentai
+        tags: `rating:${rating}`,
       },
       json: true, // Automatically parses the JSON string in the response
     }
@@ -24,11 +25,11 @@ export default {
         throw err
       })
   },
-  getPaginated: (page) => {
+  getPaginated: (page: number) => {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`, // no hentai
+        tags: `rating:${rating}`,
         page,
       },
       json: true,
@@ -40,4 +41,23 @@ export default {
         throw err
       })
   },
+  // test flowtype
+  getByTag: (tags: string) => {
+    const searches = tags.replace(' ', '+')
+    console.log('searches', searches)
+
+    const options = {
+      uri: 'https://danbooru.donmai.us/posts.json',
+      qs: {
+        tags: `rating:${rating}&tags=${searches}`,
+      },
+      json: true,
+    }
+
+    return request(options)
+      .then(res => Promise.resolve(res))
+      .catch((err) => {
+        throw err
+      })
+  }
 }
