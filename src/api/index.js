@@ -1,25 +1,28 @@
-import Posts from './posts';
+import Posts from './posts'
 
 export default {
   Posts,
-};
+}
+
 
 // danbooru allows only 'preview_file_url' on external domain, otherwise: CORS
 // need to change to class
 // make query builder
-class ApiClass {
-  constructor() {
-    this.rating = process.env.RATING ? `rating:${process.env.RATING}` : 'rating:s';
+class DanbooruApi {
+  rating: string = ''
 
+  constructor(config: Object) {
+    this.rating = process.env.RATING ? `rating:${process.env.RATING}` : 'rating:s'
+    this.Posts = Posts.get.bind(this, this.rating)
 
-    // this.Posts = Posts
-    this.Posts = Posts.get.bind(this, this.rating);
-  }
-
-
-  _queryBuilder() {
-
+    this.options = {
+      uri: 'https://danbooru.donmai.us/posts.json',
+      qs: {
+        tags: `rating:${this.rating}`
+      },
+      json: true
+    }
   }
 }
 
-export { ApiClass };
+export { DanbooruApi }
