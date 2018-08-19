@@ -8,7 +8,8 @@ export default class DanbooruPosts extends Component {
 
     this.state = {
       images: [],
-      currentPage: 1
+      currentPage: 1,
+      isLoading: false
     }
   }
 
@@ -20,18 +21,22 @@ export default class DanbooruPosts extends Component {
 
       this.setState((prevState, props) => {
         return {
-          // danbooru allows only 'preview_file_url' on external domain, otherwise: CORS
-          images: res.map((image) => image),
+          currentPage: 1,
+          isLoading: false,
+          images: res.map((image) => image)
         }
       })
     })
   }
 
   getPaginated = () => {
+    this.setState({ isLoading: true })
+
     Danbooru.Posts.getPaginated(this.state.currentPage + 1)
     .then((res) => {
       this.setState((prevState, props) => {
         return {
+          isLoading: false,
           images: res.map((image) => image),
           currentPage: prevState.currentPage + 1
         }
@@ -40,10 +45,13 @@ export default class DanbooruPosts extends Component {
   }
 
   getPrevPaginated = () => {
+    this.setState({ isLoading: true })
+
     Danbooru.Posts.getPaginated(this.state.currentPage - 1)
     .then((res) => {
       this.setState((prevState, props) => {
         return {
+          isLoading: false,
           images: res.map((image) => image),
           currentPage: prevState.currentPage - 1
         }
@@ -66,16 +74,26 @@ export default class DanbooruPosts extends Component {
     }
   }
 
+  renderPaginationControl = () => {
+    if (this.state.isLoading) {
+      return <div className={'danbooru--pagination_control'}>Loading...</div>
+    } else {
+      return (
+        <div className={'danbooru--pagination_control'}>
+          {this.state.currentPage > 1 && <button type={'button'} onClick={this.getPrevPaginated}>Prev</button>}
+          <button type={'button'} onClick={this.getPaginated}>Next</button>
+        </div>
+      )
+    }
+  }
+
   render() {
     return (
       <div className={'danbooru--posts'}>
         <div className={'posts_grid'}>
           {this.renderImages()}
         </div>
-        <div className={'danbooru--pagination_control'}>
-          {this.state.currentPage > 1 && <button type={'button'} onClick={this.getPrevPaginated}>Prev</button>}
-          <button type={'button'} onClick={this.getPaginated}>Next</button>
-        </div>
+        {this.renderPaginationControl()}
       </div>
     )
   }
