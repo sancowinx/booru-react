@@ -5,41 +5,39 @@ import request from 'request-promise'
 
 // https://github.com/request/request-promise#get-something-from-a-json-rest-api
 
+const rating = process.env.RATING || 's'
+
 export default {
   get: () => {
     // https://github.com/request/request-promise#get-something-from-a-json-rest-api
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-          tags: 'rating:s' // no hentai
+        tags: `rating:${rating}`, // no hentai
       },
-      json: true // Automatically parses the JSON string in the response
+      json: true, // Automatically parses the JSON string in the response
     }
 
     return request(options)
-    .then((res) => {
-      return Promise.resolve(res)
-    })
-    .catch((err) => {
-      throw err
-    })
+      .then(res => Promise.resolve(res))
+      .catch((err) => {
+        throw err
+      })
   },
   getPaginated: (page) => {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: 'rating:s', // no hentai
-        page
+        tags: `rating:${rating}`, // no hentai
+        page,
       },
-      json: true
+      json: true,
     }
 
     return request(options)
-    .then((res) => {
-      return Promise.resolve(res)
-    })
-    .catch((err) => {
-      throw err
-    })
-  }
+      .then(res => Promise.resolve(res))
+      .catch((err) => {
+        throw err
+      })
+  },
 }
