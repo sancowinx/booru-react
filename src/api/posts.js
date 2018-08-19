@@ -43,13 +43,11 @@ export default {
   },
   // test flowtype
   getByTag: (tags: string) => {
-    const searches = tags.replace(' ', '+')
-    console.log('searches', searches)
-
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}&tags=${searches}`,
+        rating: `${rating}`,
+        tags
       },
       json: true,
     }
