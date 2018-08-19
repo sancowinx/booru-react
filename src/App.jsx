@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './stylesheets/App.css'
-
+import Danbooru from './api'
 import SearchQueryForm from './components/query'
 import DanbooruPost from './components/posts'
 
@@ -18,22 +18,115 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      images: [],
+      currentPage: 1,
+      isLoading: false
+    }
     // there is no caching yet
 
     // non essential feature
     // theme using react context
   }
 
+  componentWillMount() {
+    this.setState({ isLoading: true })
+  }
+
+  componentDidMount() {
+    Danbooru.Posts.get()
+    .then((res) => {
+
+      // const response = JSON.parse(res) // if using options object, it will auto parse
+
+      this.setState((prevState, props) => {
+        return {
+          currentPage: 1,
+          isLoading: false,
+          images: res.map((image) => image)
+        }
+      })
+    })
+  }
+
+  getPaginated = () => {
+    this.setState({ isLoading: true })
+
+    Danbooru.Posts.getPaginated(this.state.currentPage + 1)
+    .then((res) => {
+      this.setState((prevState, props) => {
+        return {
+          isLoading: false,
+          images: res.map((image) => image),
+          currentPage: prevState.currentPage + 1
+        }
+      })
+    })
+  }
+
+  getFirstPage = () => {
+    this.setState({ isLoading: true })
+
+    Danbooru.Posts.getPaginated(1)
+    .then((res) => {
+      this.setState((prevState, props) => {
+        return {
+          isLoading: false,
+          images: res.map((image) => image),
+          currentPage: 1
+        }
+      })
+    })
+  }
+
+  getPrevPaginated = () => {
+    this.setState({ isLoading: true })
+
+    Danbooru.Posts.getPaginated(this.state.currentPage - 1)
+    .then((res) => {
+      this.setState((prevState, props) => {
+        return {
+          isLoading: false,
+          images: res.map((image) => image),
+          currentPage: prevState.currentPage - 1
+        }
+      })
+    })
+  }
+
+  getByTag = (tags) => {
+    this.setState({ isLoading: true })
+
+    Danbooru.Posts.getByTag(tags)
+    .then((res) => {
+      console.log('back', res)
+      this.setState((prevState, props) => {
+        return {
+          isLoading: false,
+          images: res.map((image) => image),
+          currentPage: 1
+        }
+      })
+    })
+  }
+
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
           <a className="App-title" href="/">Danbooru React</a>
           <br />
-          <SearchQueryForm />
+          <SearchQueryForm getByTag={this.getByTag} />
         </header>
-        <DanbooruPost />
+        <DanbooruPost
+          getPaginated={this.getPaginated}
+          getFirstPage={this.getFirstPage}
+          getPrevPaginated={this.getPrevPaginated}
+          {...this.state}
+        />
+
+        {/* Pagination controlled by current searches */}
       </div>
     )
   }
