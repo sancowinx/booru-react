@@ -14,7 +14,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`,
+        rating: `${rating}`,
       },
       json: true, // Automatically parses the JSON string in the response
     }
@@ -29,7 +29,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        tags: `rating:${rating}`,
+        rating: `${rating}`,
         page,
       },
       json: true,
