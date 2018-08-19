@@ -8,6 +8,7 @@ import request from 'request-promise'
 
 const rating = process.env.RATING || 's'
 
+// FIXME: Need refactor, only the options query parameters changed
 export default {
   get: () => {
     // https://github.com/request/request-promise#get-something-from-a-json-rest-api
@@ -48,6 +49,23 @@ export default {
       qs: {
         rating: `${rating}`,
         tags
+      },
+      json: true
+    }
+
+    return request(options)
+      .then(res => Promise.resolve(res))
+      .catch((err) => {
+        throw err
+      })
+  },
+  getByTagPaginated: (tags: string, page: number) => {
+    const options = {
+      uri: 'https://danbooru.donmai.us/posts.json',
+      qs: {
+        rating: `${rating}`,
+        tags,
+        page
       },
       json: true
     }

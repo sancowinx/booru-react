@@ -4,7 +4,6 @@ import Danbooru from './api'
 import SearchQueryForm from './components/query'
 import DanbooruPost from './components/posts'
 
-// TODO: use lodash
 // TODO: use JedWatson/react-select, for a tag search
 // TODO: use Immutable.js
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#formatting-code-automatically
@@ -21,7 +20,8 @@ class App extends Component {
     this.state = {
       images: [],
       currentPage: 1,
-      isLoading: false
+      isLoading: false,
+      currentSearch: ''
     }
     // there is no caching yet
 
@@ -52,46 +52,88 @@ class App extends Component {
   getPaginated = () => {
     this.setState({ isLoading: true })
 
-    Danbooru.Posts.getPaginated(this.state.currentPage + 1)
-    .then((res) => {
-      this.setState((prevState, props) => {
-        return {
-          isLoading: false,
-          images: res.map((image) => image),
-          currentPage: prevState.currentPage + 1
-        }
+    if (this.state.currentSearch) {
+      Danbooru.Posts.getByTagPaginated(this.state.currentSearch, this.state.currentPage)
+      .then((res) => {
+        this.setState((prevState) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: prevState.currentPage + 1
+          }
+        })
       })
-    })
+    } else {
+
+      Danbooru.Posts.getPaginated(this.state.currentPage + 1)
+      .then((res) => {
+        this.setState((prevState, props) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: prevState.currentPage + 1
+          }
+        })
+      })
+    }
   }
 
   getFirstPage = () => {
     this.setState({ isLoading: true })
 
-    Danbooru.Posts.getPaginated(1)
-    .then((res) => {
-      this.setState((prevState, props) => {
-        return {
-          isLoading: false,
-          images: res.map((image) => image),
-          currentPage: 1
-        }
+    if (this.state.currentSearch) {
+      Danbooru.Posts.getByTagPaginated(this.state.currentSearch, this.state.currentPage)
+      .then((res) => {
+        this.setState((prevState) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: 1
+          }
+        })
       })
-    })
+    } else {
+
+      Danbooru.Posts.getPaginated(1)
+      .then((res) => {
+        this.setState((prevState, props) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: 1
+          }
+        })
+      })
+    }
   }
 
   getPrevPaginated = () => {
     this.setState({ isLoading: true })
 
-    Danbooru.Posts.getPaginated(this.state.currentPage - 1)
-    .then((res) => {
-      this.setState((prevState, props) => {
-        return {
-          isLoading: false,
-          images: res.map((image) => image),
-          currentPage: prevState.currentPage - 1
-        }
+    if (this.state.currentSearch) {
+      Danbooru.Posts.getByTagPaginated(this.state.currentSearch, this.state.currentPage)
+      .then((res) => {
+        this.setState((prevState) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: prevState.currentPage - 1
+          }
+        })
       })
-    })
+    } else {
+
+      Danbooru.Posts.getPaginated(this.state.currentPage - 1)
+      .then((res) => {
+        this.setState((prevState, props) => {
+          return {
+            isLoading: false,
+            images: res.map((image) => image),
+            currentPage: prevState.currentPage - 1
+          }
+        })
+      })
+    }
   }
 
   getByTag = (tags) => {
@@ -99,19 +141,18 @@ class App extends Component {
 
     Danbooru.Posts.getByTag(tags)
     .then((res) => {
-      console.log('back', res)
       this.setState((prevState, props) => {
         return {
           isLoading: false,
           images: res.map((image) => image),
-          currentPage: 1
+          currentPage: 1,
+          currentSearch: tags
         }
       })
     })
   }
 
   render() {
-
     return (
       <div className="App">
         <header className="App-header">
