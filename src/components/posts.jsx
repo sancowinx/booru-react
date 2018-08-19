@@ -13,6 +13,10 @@ export default class DanbooruPosts extends Component {
     }
   }
 
+  componentWillMount() {
+    this.setState({ isLoading: true })
+  }
+
   componentDidMount() {
     Danbooru.Posts.get()
     .then((res) => {
