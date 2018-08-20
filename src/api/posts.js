@@ -6,7 +6,7 @@ import request from 'request-promise'
 
 // https://github.com/request/request-promise#get-something-from-a-json-rest-api
 
-const rating = process.env.RATING || 's'
+const rating = process.env.RATING ? `rating:${process.env.RATING}` : 'rating:s'
 
 // FIXME: Need refactor, only the options query parameters changed
 export default {
@@ -15,7 +15,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        rating: `${rating}`,
+        tags: `${rating}`,
       },
       json: true
     }
@@ -30,8 +30,8 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        rating: `${rating}`,
-        page,
+        tags: `${rating}`,
+        page
       },
       json: true
     }
@@ -47,8 +47,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        rating: `${rating}`,
-        tags
+        tags: `${rating} ${tags}`,
       },
       json: true
     }
@@ -63,8 +62,7 @@ export default {
     const options = {
       uri: 'https://danbooru.donmai.us/posts.json',
       qs: {
-        rating: `${rating}`,
-        tags,
+        tags: `${rating} ${tags}`,
         page
       },
       json: true
