@@ -7,8 +7,8 @@ const rating = process.env.RATING ? `rating:${rating}` : 'rating:s'
 
 type Query = {
   tags?: string,
+  limit?: number,
   page?: number,
-  rating?: string,
   md5?: string,
   random?: boolean
 }
