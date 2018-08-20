@@ -1,14 +1,49 @@
 // @flow
 import request from 'request-promise'
+import _ from 'lodash'
 
-// request-promise parse results as stringified json, if use .get(), .post()
-// if using options object, it will auto parse
+// ???
+const rating = process.env.RATING ? `rating:${rating}` : 'rating:s'
 
-// https://github.com/request/request-promise#get-something-from-a-json-rest-api
+type Query = {
+  tags?: string,
+  page?: number,
+  rating?: string,
+  md5?: string,
+  random?: boolean
+}
 
-const rating = process.env.RATING || 's'
+const queryBuilder = (options: Query) => {
+  const defaultRequestOptions = {
+      uri: 'https://danbooru.donmai.us/posts.json',
+      qs: {},
+      json: true
+    }
 
-// FIXME: Need refactor, only the options query parameters changed
+  // clean options
+  const params = _.chain()
+  .cloneDeep(options)
+  .omitBy(_.isNil)
+  .omitBy(_.isNaN)
+  .omitBy(_.isNull)
+  .value()
+
+  const request = _.chain()
+  .cloneDeep(defaultRequestOptions)
+  .set('qs', params)
+  .value()
+
+  return request
+}
+
+export const getPosts = (query: Query) => {
+  return request(queryBuilder(query))
+  .then(res => Promise.resolve(res))
+  .catch((err) => {
+    throw err
+  })
+}
+
 export default {
   get: () => {
     // https://github.com/request/request-promise#get-something-from-a-json-rest-api

@@ -1,6 +1,8 @@
 export default {
   rating: process.env.RATING || 'e',
-  itemPerPage: process.env.ITEM_LOAD_PER_PAGE || '25'
+  itemPerPage: process.env.ITEM_LOAD_PER_PAGE || '25',
+  danbooruApiKey: process.env.DANBOORU_API_KEY,
+  yandereApiKey: process.env.YANDERE_API_KEY
 }
 
 
