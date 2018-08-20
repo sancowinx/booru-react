@@ -53,7 +53,7 @@ class App extends Component {
     this.setState({ isLoading: true })
 
     if (this.state.currentSearch) {
-      Danbooru.Posts.getByTagPaginated(this.state.currentSearch, this.state.currentPage)
+      Danbooru.Posts.getByTagPaginated(this.state.currentSearch, this.state.currentPage + 1)
       .then((res) => {
         this.setState((prevState) => {
           return {
