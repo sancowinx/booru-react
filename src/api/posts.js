@@ -13,25 +13,27 @@ type Query = {
   random?: boolean
 }
 
+// needed a unit test
+// might need to split to Danbooru Query Builder or Yande.re Query Builder
 const queryBuilder = (options: Query) => {
   const defaultRequestOptions = {
-      uri: 'https://danbooru.donmai.us/posts.json',
-      qs: {},
-      json: true
-    }
+    uri: 'https://danbooru.donmai.us/posts.json',
+    qs: {},
+    json: true
+  }
 
   // clean options
-  const params = _.chain()
-  .cloneDeep(options)
+  const params = _.chain(_.cloneDeep(options))
+  .set("tags", `${rating} ${options.tags}`) // no
   .omitBy(_.isNil)
   .omitBy(_.isNaN)
   .omitBy(_.isNull)
-  .value()
+  .omitBy(_.isEmpty)
+  .value();
 
-  const request = _.chain()
-  .cloneDeep(defaultRequestOptions)
-  .set('qs', params)
-  .value()
+  const request = _.chain(_.cloneDeep(defaultRequestOptions))
+  .set("qs", params)
+  .value();
 
   return request
 }
